@@ -39,8 +39,10 @@ class ToDoList(models.Model):
 
     title = models.CharField(max_length=150, unique=True)
     details = models.TextField(blank=True)
-    due_date = models.DateTimeField(blank=True)
+    due_date = models.DateTimeField(blank=True, null=True)
     labels = models.ForeignKey(Label)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
 
     PENDING = 'P'
     COMPLETED = 'C'
