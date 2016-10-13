@@ -1,8 +1,8 @@
 from django.conf.urls import url
-from . import views
+from .views import HomeView
 
 
 app_name = 'todoapp'
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
+    url(r'^$', HomeView.as_view(), name='home'),
 ]

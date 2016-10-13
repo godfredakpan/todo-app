@@ -1,5 +1,30 @@
 {% extends 'index.html' %}
 
 {% block content %}
-    <h1>In the new template</h1>
+    <h1>Welcome, find your to-dos here.</h1>
+    <input class="btn btn-default" type="submit" name="create_todo" value="Create ToDo">
+    <ul> Labels {% for label in labels %}</ul>
+        <li>{{ label }}</li>
+    {% empty %}
+        <p>Add new label</p>
+    {% endfor %}
+
+    <ul> Pending TODOs {% for todo in pending_todos %}</ul>
+        <li>{{ todo }}</li>
+    {% empty %}
+        <p>No pending ToDO</p>
+    {% endfor %}
+
+    <ul> Completed TODOs {% for todo in completed_todos %}</ul>
+        <li>{{ todo }}</li>
+    {% empty %}
+        <p>No completed ToDO</p>
+    {% endfor %}
+
+    <ul> Missed TODOs {% for todo in missed_todos %}</ul>
+        <li>{{ todo }}</li>
+    {% empty %}
+        <p>No missed ToDO</p>
+    {% endfor %}
+
 {% endblock %}
