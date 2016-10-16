@@ -1,30 +1,31 @@
-{% extends 'index.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
-    <h1>Welcome, find your to-dos here.</h1>
+{# <div class="container"> #}
     <input class="btn btn-default" type="submit" name="create_todo" value="Create ToDo">
-    <ul> Labels {% for label in labels %}</ul>
-        <li>{{ label }}</li>
-    {% empty %}
-        <p>Add new label</p>
-    {% endfor %}
+    <form action="{% url 'todoapp:home' %}" method="get">
+        <div class="row">
+            <div class="input-field col s6">
+                <input type="search" name="q">
+                <label for="icon_prefix">Search</label>
+            </div>
+        </div>
+    </form>
 
-    <ul> Pending TODOs {% for todo in pending_todos %}</ul>
-        <li>{{ todo }}</li>
-    {% empty %}
-        <p>No pending ToDO</p>
-    {% endfor %}
+    <p>Labels</p>
+    <ul>
+        <li><a href="{% url 'todoapp:home' %}" class="chip">All</a></li>
+        {% for label in labels %}
+            <li><a href="?label={{ label.slug }}" class="chip">{{ label }}</a></li>
+        {% empty %}
+            <p>Add new label</p>
+        {% endfor %}
+    </ul>
 
-    <ul> Completed TODOs {% for todo in completed_todos %}</ul>
-        <li>{{ todo }}</li>
-    {% empty %}
-        <p>No completed ToDO</p>
-    {% endfor %}
-
-    <ul> Missed TODOs {% for todo in missed_todos %}</ul>
-        <li>{{ todo }}</li>
-    {% empty %}
-        <p>No missed ToDO</p>
-    {% endfor %}
-
+    <div class="row">
+        {% for item in todos_by_status %}
+            {% include "todoapp/todo_status_snippet.html" with status=item.status status_todos=item.todos %}
+        {% endfor %}
+    </div>
+{# </div> #}
 {% endblock %}

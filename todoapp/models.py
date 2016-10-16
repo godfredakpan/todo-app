@@ -34,26 +34,43 @@ class Label(models.Model):
         return self.name
 
 
-class ToDoList(models.Model):
+# class ToDoListManager(models.Manager):
+
+#     def due_date_to_num(self, todo):
+#         if todo.due_date is None:
+#             return 0
+#         return todo.due_date.timestamp()
+
+#     def order_by_due_date(self):
+#         ordered = sorted(self.get_queryset(),
+#                          key=self.due_date_to_num,
+#                          reverse=False)
+#         return ordered
+
+
+class TodoList(models.Model):
     """Core model of the app defining the ToDo list."""
 
     title = models.CharField(max_length=150, unique=True)
     details = models.TextField(blank=True)
     due_date = models.DateTimeField(blank=True, null=True)
-    labels = models.ForeignKey(Label)
+    label = models.ForeignKey(Label)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
-    PENDING = 'P'
-    COMPLETED = 'C'
-    MISSED = 'M'
+    # objects = models.Manager()
+    # custom_manager = ToDoListManager()
+
+    PENDING = 'Pending'
+    COMPLETED = 'Completed'
+    MISSED = 'Missed'
     STATUS_CHOICES = (
-        (PENDING, 'Pending'),
-        (COMPLETED, 'Completed'),
-        (MISSED, 'Missed'),
+        (PENDING, PENDING),
+        (COMPLETED, COMPLETED),
+        (MISSED, MISSED),
     )
 
-    status = models.CharField(max_length=2, choices=STATUS_CHOICES,
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES,
                               default=PENDING)
 
     def __str__(self):

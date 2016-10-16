@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ToDoList, Label
+from .models import TodoList, Label
 
 
-admin.site.register([ToDoList, Label])
+admin.site.register([TodoList, Label])
