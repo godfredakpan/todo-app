@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{# <div class="container"> #}
+    <input class="btn btn-default" type="submit" name="create_todo" value="Create ToDo">
+    <form action="{% url 'todoapp:home' %}" method="get">
+        <div class="row">
+            <div class="input-field col s6">
+                <input type="search" name="q">
+                <label for="icon_prefix">Search</label>
+            </div>
+        </div>
+    </form>
+
+    <p>Labels</p>
+    <ul>
+        <li><a href="{% url 'todoapp:home' %}" class="chip">All</a></li>
+        {% for label in labels %}
+            <li><a href="?label={{ label.slug }}" class="chip">{{ label }}</a></li>
+        {% empty %}
+            <p>Add new label</p>
+        {% endfor %}
+    </ul>
+
+    <div class="row">
+        {% for item in todos_by_status %}
+            {% include "todoapp/todo_status_snippet.html" with status=item.status status_todos=item.todos %}
+        {% endfor %}
+    </div>
+{# </div> #}
+{% endblock %}
