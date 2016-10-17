@@ -1,14 +1,16 @@
 <div class="col s6 m3">
     <p> {{ status|title }} TODOs</p>
     {% for todo in status_todos %}
-        <div class="card blue-grey darken-1">
-            <div class="card-content white-text">
+        <div class="card">
+            <div class="card-content">
                 <a href="?label={{ todo.label.slug }}" class="chip">{{ todo.label.name }}</a>
-                <span class="card-title">{{ todo.title }}</span>
+                <span class="card-title activator grey-text text-darken-4">{{ todo.title }}<i class="material-icons right">more_vert</i></span>
                 <p>{% if todo.due_date %}Due date: {{ todo.due_date }}{% endif %}</p>
+                <p><a href="#">Edit</a></p>
             </div>
-            <div class="card-action">
-                <a href="#">More</a>
+            <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">{{ todo.title }}<i class="material-icons right">close</i></span>
+                <p>{{ todo.details }}</p>
             </div>
         </div>
     {% empty %}
