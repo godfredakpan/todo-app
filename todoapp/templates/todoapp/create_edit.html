@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+        <form class="col s12">
+            <div class="col s6">
+                <div class="input-field">
+                    <label for="title">Title</label>
+                    <input id="title" name="title" type="text" class="validate">
+                </div>
+                <div class="input-field">
+                    <label for="details">Details</label>
+                    <textarea id="details" name="details" class="materialize-textarea"></textarea>
+                </div>
+                <div class="input-field">
+                    <label for="due_date">Due date</label>
+                    <input id="due_date" name="due_date" type="date" class="datepicker">
+                </div>
+                <div class="input-field">
+                    <select name="status">
+                        <option value="" disabled selected>Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+              </div>
+                <div class="input-field">
+                <select multiple name="label">
+                    <option value="" disabled selected>Label</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select>
+              </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

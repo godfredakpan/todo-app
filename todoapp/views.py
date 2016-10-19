@@ -43,3 +43,9 @@ class HomeView(View):
             'todos_by_status': todos_by_status
         }
         return render(request, 'todoapp/home.html', context)
+
+
+class CreateView(View):
+
+    def get(self, request):
+        return render(request, 'todoapp/create_edit.html', {})

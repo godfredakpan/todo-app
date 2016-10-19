@@ -2,7 +2,7 @@
 
 {% block content %}
 {# <div class="container"> #}
-    <input class="btn btn-default" type="submit" name="create_todo" value="Create ToDo">
+    <a href="{% url 'todoapp:create' %}" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
     <form action="{% url 'todoapp:home' %}" method="get">
         <div class="row">
             <div class="input-field col s6">
