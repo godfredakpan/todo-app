@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.db.models import Q
+from django.urls import reverse
 
 from .models import Label, TodoList
-from .forms import SearchForm
+from .forms import SearchForm, TodoForm
 
 
 class HomeView(View):
@@ -45,7 +46,36 @@ class HomeView(View):
         return render(request, 'todoapp/home.html', context)
 
 
-class CreateView(View):
+class CreateUpdateTodoView(View):
 
-    def get(self, request):
-        return render(request, 'todoapp/create_edit.html', {})
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        form = TodoForm()
+
+        if pk is not None:
+            todo = get_object_or_404(TodoList, pk=pk)
+            form = TodoForm(instance=todo)
+
+        context = {
+            'form': form
+        }
+        return render(request, 'todoapp/create_edit.html', context)
+
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+
+        if pk is not None:
+            todo = get_object_or_404(TodoList, pk=pk)
+            form = TodoForm(request.POST, instance=todo)
+        else:
+            form = TodoForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('todoapp:home'))
+
+        context = {
+            'form': form
+        }
+
+        return render(request, 'todoapp/create_edit.html', context)
