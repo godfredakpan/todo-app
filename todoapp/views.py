@@ -79,3 +79,13 @@ class CreateUpdateTodoView(View):
         }
 
         return render(request, 'todoapp/create_edit.html', context)
+
+
+class DeleteTodoView(View):
+
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+
+        todo = get_object_or_404(TodoList, pk=pk)
+        todo.delete()
+        return redirect(reverse('todoapp:home'))

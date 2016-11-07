@@ -1,3 +1,7 @@
 h1 {
     color: blue;
 }
+
+.input-field .date-label {
+    top: -0.8rem;
+}

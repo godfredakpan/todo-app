@@ -7,6 +7,10 @@
                 <span class="card-title activator grey-text text-darken-4">{{ todo.title }}<i class="material-icons right">more_vert</i></span>
                 <p>{% if todo.due_date %}Due date: {{ todo.due_date }}{% endif %}</p>
                 <p><a href="{% url 'todoapp:edit_todo' todo.pk %}">Edit</a></p>
+                <p><form action="{% url 'todoapp:delete_todo' todo.pk %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" name="delete" value="Delete">
+                </form></p>
             </div>
             <div class="card-reveal">
                 <span class="card-title grey-text text-darken-4">{{ todo.title }}<i class="material-icons right">close</i></span>
