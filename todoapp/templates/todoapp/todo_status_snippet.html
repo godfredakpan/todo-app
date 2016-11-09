@@ -11,6 +11,9 @@
                     {% csrf_token %}
                     <input type="submit" name="delete" value="Delete">
                 </form></p>
+                {% if status == 'Pending' %}
+                    <p><a href="{% url 'todoapp:complete_todo' todo.pk %}">mark complete</a></p>
+                {% endif %}
             </div>
             <div class="card-reveal">
                 <span class="card-title grey-text text-darken-4">{{ todo.title }}<i class="material-icons right">close</i></span>

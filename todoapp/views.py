@@ -89,3 +89,15 @@ class DeleteTodoView(View):
         todo = get_object_or_404(TodoList, pk=pk)
         todo.delete()
         return redirect(reverse('todoapp:home'))
+
+
+class CompleteTodoView(View):
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+
+        todo = get_object_or_404(TodoList, pk=pk)
+
+        todo.status = TodoList.COMPLETED
+        todo.save()
+        return redirect(reverse('todoapp:home'))
