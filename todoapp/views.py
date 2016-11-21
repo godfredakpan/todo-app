@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.db.models import Q
@@ -30,6 +32,10 @@ class HomeView(View):
                 form = SearchForm()
 
         pending_todos = todo_lists.filter(status=TodoList.PENDING)
+        skipped_todos = pending_todos.filter(due_date__isnull=False,
+                                             due_date__lt=datetime.now())
+        # Update skipped todos to missed
+        skipped_todos.update(status=TodoList.MISSED)
         missed_todos = todo_lists.filter(status=TodoList.MISSED)
         completed_todos = todo_lists.filter(status=TodoList.COMPLETED)
 
