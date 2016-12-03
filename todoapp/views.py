@@ -9,11 +9,27 @@ from .models import Label, TodoList
 from .forms import SearchForm, TodoForm
 
 
+def sort_todolists(todolists):
+    lists_with_due_date = []
+    lists_without_due_date = []
+
+    for todolist in todolists:
+        if todolist.due_date:
+            lists_with_due_date.append(todolist)
+        else:
+            lists_without_due_date.append(todolist)
+
+    lists_with_due_date.sort(key=lambda todolist: todolist.due_date)
+    lists_without_due_date.sort(key=lambda todolist: todolist.date_created)
+
+    return lists_with_due_date + lists_without_due_date
+
+
 class HomeView(View):
 
     def get(self, request):
         labels = Label.objects.all()
-        todo_lists = TodoList.objects.all().order_by('due_date')
+        todo_lists = TodoList.objects.all()
 
         selected_label = request.GET.get('label')
         if selected_label:
@@ -28,8 +44,6 @@ class HomeView(View):
                                                Q(details__icontains=q) |
                                                Q(label__name__icontains=q)
                                                )
-            else:
-                form = SearchForm()
 
         pending_todos = todo_lists.filter(status=TodoList.PENDING)
         skipped_todos = pending_todos.filter(due_date__isnull=False,
@@ -40,9 +54,9 @@ class HomeView(View):
         completed_todos = todo_lists.filter(status=TodoList.COMPLETED)
 
         todos_by_status = [
-            {'status': TodoList.PENDING, 'todos': pending_todos},
-            {'status': TodoList.COMPLETED, 'todos': completed_todos},
-            {'status': TodoList.MISSED, 'todos': missed_todos}
+            {'status': TodoList.PENDING, 'todos': sort_todolists(pending_todos)},
+            {'status': TodoList.COMPLETED, 'todos': sort_todolists(completed_todos)},
+            {'status': TodoList.MISSED, 'todos': sort_todolists(missed_todos)}
         ]
 
         context = {

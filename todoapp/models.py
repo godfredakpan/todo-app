@@ -34,20 +34,6 @@ class Label(models.Model):
         return self.name
 
 
-# class ToDoListManager(models.Manager):
-
-#     def due_date_to_num(self, todo):
-#         if todo.due_date is None:
-#             return 0
-#         return todo.due_date.timestamp()
-
-#     def order_by_due_date(self):
-#         ordered = sorted(self.get_queryset(),
-#                          key=self.due_date_to_num,
-#                          reverse=False)
-#         return ordered
-
-
 class TodoList(models.Model):
     """Core model of the app defining the ToDo list."""
 
@@ -58,8 +44,7 @@ class TodoList(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
-    # objects = models.Manager()
-    # custom_manager = ToDoListManager()
+    objects = models.Manager()
 
     PENDING = 'Pending'
     COMPLETED = 'Completed'
