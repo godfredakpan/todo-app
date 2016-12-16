@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.urls import reverse
 
 from .models import Label, TodoList
-from .forms import SearchForm, TodoForm
+from .forms import SearchForm, TodoForm, LabelForm
 
 
 def sort_todolists(todolists):
@@ -121,3 +121,24 @@ class CompleteTodoView(View):
         todo.status = TodoList.COMPLETED
         todo.save()
         return redirect(reverse('todoapp:home'))
+
+
+class CreateLabelView(View):
+
+    def get(self, request):
+        form = LabelForm()
+
+        context = {'form': form}
+        return render(request, 'todoapp/create_label.html', context)
+
+    def post(self, request, *args, **kwargs):
+        form = LabelForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('todoapp:new_todo'))
+
+        context = {
+            'form': form
+        }
+        return render(request, 'todoapp/create_label.html', context)

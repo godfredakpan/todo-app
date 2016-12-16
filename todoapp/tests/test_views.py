@@ -102,3 +102,75 @@ class HomeViewTest(TestCase):
         for status_column in todos_by_status:
             for todo in status_column['todos']:
                 self.assertIn('one', '{0},{1},{2}'.format(todo.title, todo.details, todo.label.name))
+
+
+class CreateUpdateTodoViewTest(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+
+        Label.objects.create(name='all')
+        self.label_1 = Label.objects.create(name='label_one')
+
+        self.todo_list = TodoList.objects.create(title='todo_one', label=self.label_1, status=TodoList.PENDING)
+        self.todo_list2 = TodoList.objects.create(title='todo_two', label=self.label_1, status=TodoList.PENDING)
+
+    def test_create_todo_route(self):
+        """ Tests that create todo route can be loaded successfully."""
+        response = self.client.get(reverse('todoapp:new_todo'))
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_todo_route(self):
+        """ Tests that edit todo route can be loaded successfully."""
+        data = {'pk': self.todo_list.id}
+        response = self.client.get(reverse('todoapp:edit_todo', kwargs=data))
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_create_todo(self):
+        """ Tests that todolist can be created successfully."""
+        data = {'title': 'todo_two', 'label': self.label_1.id, 'status': TodoList.PENDING}
+        response = self.client.post(reverse('todoapp:new_todo'), data, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(TodoList.objects.filter(title='todo_two').exists())
+        self.assertContains(response, 'todo_two')
+
+    def test_edit_todo(self):
+        """ Tests that todolist can be edited successfully."""
+        data = {'title': 'todo_one_edited', 'label': self.label_1.id, 'status': TodoList.PENDING}
+        response = self.client.post(reverse('todoapp:edit_todo', kwargs={'pk': self.todo_list.id}),
+                                     data, follow=True)
+
+        self.todo_list.refresh_from_db()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.todo_list.title, 'todo_one_edited')
+        self.assertContains(response, 'todo_one_edited')
+
+    def test_delete_todo(self):
+        """Tests that todolist can be deleted successfully."""
+        response = self.client.post(reverse('todoapp:delete_todo', kwargs={'pk': self.todo_list2.id}),
+                                    follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'todo_two')
+
+    def test_complete_todo(self):
+        """Tests that todolist can be marked as completed."""
+        response = self.client.get(reverse('todoapp:complete_todo', kwargs={'pk': self.todo_list.id}),
+                                   follow=True)
+
+        self.todo_list.refresh_from_db()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.todo_list.status, TodoList.COMPLETED)
+
+    def test_create_label(self):
+        """Tests that you can create label successfully. """
+        data = {'name': 'label_two'}
+        response = self.client.post(reverse('todoapp:new_label'), data, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'label_two')

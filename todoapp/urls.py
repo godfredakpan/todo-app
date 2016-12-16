@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from .views import (HomeView, CreateUpdateTodoView, DeleteTodoView,
-                    CompleteTodoView,)
+                    CompleteTodoView, CreateLabelView,)
 
 
 app_name = 'todoapp'
@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/complete$',
         CompleteTodoView.as_view(),
         name='complete_todo'),
+    url(r'^new_label$', CreateLabelView.as_view(), name='new_label'),
 ]

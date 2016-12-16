@@ -16,6 +16,13 @@
                                     {% endif %}
                                 {% endfor %}
                             </select>
+                        {% elif field.name == "label" %}
+                            <select name="label">
+                                {% for label_id, label_name in form.fields.label.choices %}
+                                    <option value="{{ label_id }}">{{ label_name }}</option>
+                                {% endfor %}
+                            </select>
+                            <a href="{% url 'todoapp:new_label' %}" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
                         {% else %}
                             {{ field }}
                         {% endif %}

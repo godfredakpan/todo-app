@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from .models import TodoList
+from .models import TodoList, Label
 
 
 class SearchForm(forms.Form):
@@ -23,3 +23,9 @@ class TodoForm(ModelForm):
                 attrs={'class': 'materialize-textarea'}
             )
         }
+
+class LabelForm(ModelForm):
+
+    class Meta:
+        model = Label
+        fields = ['name']
